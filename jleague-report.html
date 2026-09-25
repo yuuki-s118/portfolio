@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>J1開幕5節レポート</title>
+<meta name="description" content="J1リーグ公式スタッツをもとにしたデータ分析サンプルレポート(櫻井祐冴 ポートフォリオ)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #f5f3ea;
+    --paper-raised: #fbfaf4;
+    --surface-2: #ece8db;
+    --ink: #16241c;
+    --ink-soft: #52604f;
+    --ink-faint: #8b917f;
+    --chalk: #d9d3bf;
+    --pitch: #1f5c3a;
+    --pitch-deep: #123c26;
+    --pitch-tint: #e4ede4;
+    --amber: #a86423;
+    --amber-tint: #f3e6d2;
+    --pos: #2f7d4f;
+    --neg: #a5402f;
+    --shadow: 0 1px 2px rgba(18, 60, 38, 0.06), 0 8px 24px rgba(18, 60, 38, 0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #10160f;
+      --paper-raised: #171f16;
+      --surface-2: #1c261a;
+      --ink: #e9e6d8;
+      --ink-soft: #a7ae9b;
+      --ink-faint: #6d7566;
+      --chalk: #2a3327;
+      --pitch: #5fae7c;
+      --pitch-deep: #2c6b45;
+      --pitch-tint: #16261b;
+      --amber: #d99a52;
+      --amber-tint: #2a2013;
+      --pos: #6fbf8b;
+      --neg: #d9836f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #10160f;
+    --paper-raised: #171f16;
+    --surface-2: #1c261a;
+    --ink: #e9e6d8;
+    --ink-soft: #a7ae9b;
+    --ink-faint: #6d7566;
+    --chalk: #2a3327;
+    --pitch: #5fae7c;
+    --pitch-deep: #2c6b45;
+    --pitch-tint: #16261b;
+    --amber: #d99a52;
+    --amber-tint: #2a2013;
+    --pos: #6fbf8b;
+    --neg: #d9836f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Source Serif 4", Georgia, "Hiragino Mincho ProN", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: "Oswald", "Hiragino Sans", sans-serif;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .eyebrow {
+    font-family: "Oswald", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .num {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- header ---------- */
+  .report-header {
+    background: linear-gradient(160deg, var(--pitch-deep), var(--pitch) 130%);
+    color: #f2f0e4;
+    margin: 0 0 28px;
+    padding: 40px 24px 34px;
+  }
+  .report-header .inner { max-width: 880px; margin: 0 auto; }
+  .report-header .eyebrow { color: #cfe6d5; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 5px 12px;
+    border: 1px solid rgba(242, 240, 228, 0.35);
+    border-radius: 999px;
+    font-family: "Oswald", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #e7f1e9;
+  }
+  .report-header h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 600;
+    line-height: 1.15;
+    margin-top: 14px;
+  }
+  .report-header .sub {
+    margin-top: 10px;
+    font-family: "Source Serif 4", serif;
+    font-size: 16px;
+    color: #d9e6da;
+    max-width: 60ch;
+  }
+  .report-header .meta {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: #bfd4c4;
+  }
+
+  /* ---------- kpi strip ---------- */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--chalk);
+    border: 1px solid var(--chalk);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .kpi-tile {
+    background: var(--paper-raised);
+    padding: 18px 16px;
+  }
+  .kpi-tile .k-label {
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .kpi-tile .k-value {
+    font-family: "Oswald", sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 6px;
+    line-height: 1.2;
+  }
+  .kpi-tile .k-sub {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* ---------- sections ---------- */
+  section { margin-bottom: 52px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+  .section-head h2 {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .section-head .section-note {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .lede {
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 66ch;
+    margin: -6px 0 20px;
+  }
+
+  /* ---------- table ---------- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--chalk); border-radius: 4px; }
+  table.standings {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 620px;
+  }
+  table.standings caption { display: none; }
+  table.standings th, table.standings td {
+    padding: 8px 10px;
+    text-align: right;
+    border-bottom: 1px solid var(--chalk);
+    white-space: nowrap;
+  }
+  table.standings th:first-child, table.standings td:first-child { text-align: left; }
+  table.standings th:nth-child(2), table.standings td:nth-child(2) { text-align: left; }
+  table.standings thead th {
+    font-family: "Oswald", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    background: var(--surface-2);
+  }
+  table.standings tbody tr:nth-child(even) { background: var(--surface-2); }
+  table.standings tbody tr.lead td { font-weight: 700; }
+  table.standings td.num { font-family: "JetBrains Mono", monospace; }
+  table.standings td.gd.pos { color: var(--pos); }
+  table.standings td.gd.neg { color: var(--neg); }
+  table.standings td.pts { font-weight: 700; }
+
+  /* ---------- scatter ---------- */
+  .scatter-figure { display: flex; flex-direction: column; gap: 10px; }
+  .scatter-figure svg { width: 100%; height: auto; display: block; }
+  .scatter-caption {
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* ---------- diverging bar (GD) ---------- */
+  .gd-chart { display: flex; flex-direction: column; gap: 3px; }
+  .gd-row { display: grid; grid-template-columns: 128px 1fr 40px; align-items: center; gap: 8px; }
+  .gd-row .team {
+    font-size: 12.5px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--ink-soft);
+  }
+  .gd-row.lead .team { color: var(--ink); font-weight: 700; }
+  .gd-track {
+    position: relative;
+    height: 15px;
+    background: linear-gradient(to right, transparent 49.9%, var(--chalk) 49.9%, var(--chalk) 50.1%, transparent 50.1%);
+  }
+  .gd-bar {
+    position: absolute;
+    top: 1px;
+    height: 13px;
+    border-radius: 2px;
+  }
+  .gd-bar.pos { background: var(--pos); left: 50%; }
+  .gd-bar.neg { background: var(--neg); right: 50%; }
+  .gd-row .val {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    text-align: right;
+  }
+  .gd-row .val.pos { color: var(--pos); }
+  .gd-row .val.neg { color: var(--neg); }
+
+  /* ---------- insights ---------- */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 28px;
+  }
+  .insight-card {
+    border-left: 3px solid var(--amber);
+    padding: 2px 0 2px 16px;
+  }
+  .insight-card h3 {
+    font-size: 15.5px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .insight-card .stat-line {
+    margin-top: 5px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    color: var(--amber);
+    background: var(--amber-tint);
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .insight-card p {
+    margin: 8px 0 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- footer ---------- */
+  .methodology {
+    border-top: 1px solid var(--chalk);
+    padding-top: 20px;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--ink-faint);
+  }
+  .methodology strong { color: var(--ink-soft); }
+
+  @media (max-width: 600px) {
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .insight-grid { grid-template-columns: 1fr; }
+    .gd-row { grid-template-columns: 92px 1fr 36px; }
+  }
+</style>
+</head>
+<body>
+<header class="report-header">
+  <div class="inner">
+    <div class="eyebrow">Meiji Yasuda J1 League — Data Report</div>
+    <span class="badge">⚽ ポートフォリオ用サンプル分析</span>
+    <h1>開幕5節、独走する町田と沈む名門</h1>
+    <p class="sub">2026–27シーズン J1リーグの公式スタッツをもとに、順位以外の「攻撃力」「守備力」「得失点差」の3指標からここまでの5試合を読み解く。</p>
+    <div class="meta">
+      <span>DATA AS OF 2026.09.02</span>
+      <span>MATCHDAY 5 / 40</span>
+      <span>SOURCE: J.LEAGUE.JP</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <p style="margin:0 0 20px;font-family:JetBrains Mono,monospace;font-size:12px"><a href="./" style="color:var(--pitch)">← ポートフォリオへ戻る</a></p>
+
+  <div class="kpi-strip">
+    <div class="kpi-tile">
+      <div class="k-label">首位</div>
+      <div class="k-value">FC町田ゼルビア</div>
+      <div class="k-sub">勝点13 / 4勝1分0敗</div>
+    </div>
+    <div class="kpi-tile">
+      <div class="k-label">最多得点</div>
+      <div class="k-value">15得点</div>
+      <div class="k-sub">FC町田ゼルビア</div>
+    </div>
+    <div class="kpi-tile">
+      <div class="k-label">最少失点</div>
+      <div class="k-value">2失点</div>
+      <div class="k-sub">サンフレッチェ広島</div>
+    </div>
+    <div class="kpi-tile">
+      <div class="k-label">最下位</div>
+      <div class="k-value">ジェフ千葉</div>
+      <div class="k-sub">勝点0 / 5戦未勝利</div>
+    </div>
+  </div>
+
+  <section id="standings">
+    <div class="section-head">
+      <h2>全20クラブ順位表</h2>
+      <span class="section-note">5試合終了時点</span>
+    </div>
+    <div class="table-scroll">
+      <table class="standings">
+        <thead>
+          <tr>
+            <th>順位</th><th>クラブ</th><th>試合</th><th>勝</th><th>分</th><th>敗</th>
+            <th>得点</th><th>失点</th><th>得失点差</th><th>勝点</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="lead"><td class="num">1</td><td>FC町田ゼルビア</td><td class="num">5</td><td class="num">4</td><td class="num">1</td><td class="num">0</td><td class="num">15</td><td class="num">4</td><td class="num gd pos">+11</td><td class="num pts">13</td></tr>
+          <tr><td class="num">2</td><td>柏レイソル</td><td class="num">5</td><td class="num">4</td><td class="num">0</td><td class="num">1</td><td class="num">10</td><td class="num">6</td><td class="num gd pos">+4</td><td class="num pts">12</td></tr>
+          <tr><td class="num">3</td><td>鹿島アントラーズ</td><td class="num">5</td><td class="num">4</td><td class="num">0</td><td class="num">1</td><td class="num">13</td><td class="num">10</td><td class="num gd pos">+3</td><td class="num pts">12</td></tr>
+          <tr><td class="num">4</td><td>サンフレッチェ広島</td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">0</td><td class="num">11</td><td class="num">2</td><td class="num gd pos">+9</td><td class="num pts">11</td></tr>
+          <tr><td class="num">5</td><td>ヴィッセル神戸</td><td class="num">5</td><td class="num">3</td><td class="num">1</td><td class="num">1</td><td class="num">6</td><td class="num">3</td><td class="num gd pos">+3</td><td class="num pts">10</td></tr>
+          <tr><td class="num">6</td><td>セレッソ大阪</td><td class="num">5</td><td class="num">3</td><td class="num">0</td><td class="num">2</td><td class="num">5</td><td class="num">5</td><td class="num gd">0</td><td class="num pts">9</td></tr>
+          <tr><td class="num">7</td><td>水戸ホーリーホック</td><td class="num">5</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">10</td><td class="num">7</td><td class="num gd pos">+3</td><td class="num pts">8</td></tr>
+          <tr><td class="num">8</td><td>FC東京</td><td class="num">5</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num">9</td><td class="num">8</td><td class="num gd pos">+1</td><td class="num pts">8</td></tr>
+          <tr><td class="num">9</td><td>横浜F・マリノス</td><td class="num">5</td><td class="num">2</td><td class="num">1</td><td class="num">2</td><td class="num">8</td><td class="num">8</td><td class="num gd">0</td><td class="num pts">7</td></tr>
+          <tr><td class="num">10</td><td>ファジアーノ岡山</td><td class="num">5</td><td class="num">2</td><td class="num">1</td><td class="num">2</td><td class="num">5</td><td class="num">5</td><td class="num gd">0</td><td class="num pts">7</td></tr>
+          <tr><td class="num">11</td><td>川崎フロンターレ</td><td class="num">5</td><td class="num">1</td><td class="num">3</td><td class="num">1</td><td class="num">9</td><td class="num">8</td><td class="num gd pos">+1</td><td class="num pts">6</td></tr>
+          <tr><td class="num">12</td><td>ガンバ大阪</td><td class="num">5</td><td class="num">1</td><td class="num">3</td><td class="num">1</td><td class="num">8</td><td class="num">9</td><td class="num gd neg">-1</td><td class="num pts">6</td></tr>
+          <tr><td class="num">13</td><td>名古屋グランパス</td><td class="num">5</td><td class="num">2</td><td class="num">0</td><td class="num">3</td><td class="num">6</td><td class="num">8</td><td class="num gd neg">-2</td><td class="num pts">6</td></tr>
+          <tr><td class="num">14</td><td>浦和レッズ</td><td class="num">5</td><td class="num">2</td><td class="num">0</td><td class="num">3</td><td class="num">11</td><td class="num">15</td><td class="num gd neg">-4</td><td class="num pts">6</td></tr>
+          <tr><td class="num">15</td><td>京都サンガF.C.</td><td class="num">5</td><td class="num">1</td><td class="num">2</td><td class="num">2</td><td class="num">7</td><td class="num">9</td><td class="num gd neg">-2</td><td class="num pts">5</td></tr>
+          <tr><td class="num">16</td><td>清水エスパルス</td><td class="num">5</td><td class="num">1</td><td class="num">1</td><td class="num">3</td><td class="num">2</td><td class="num">4</td><td class="num gd neg">-2</td><td class="num pts">4</td></tr>
+          <tr><td class="num">17</td><td>V・ファーレン長崎</td><td class="num">5</td><td class="num">1</td><td class="num">1</td><td class="num">3</td><td class="num">6</td><td class="num">11</td><td class="num gd neg">-5</td><td class="num pts">4</td></tr>
+          <tr><td class="num">18</td><td>アビスパ福岡</td><td class="num">5</td><td class="num">1</td><td class="num">0</td><td class="num">4</td><td class="num">8</td><td class="num">9</td><td class="num gd neg">-1</td><td class="num pts">3</td></tr>
+          <tr><td class="num">19</td><td>東京ヴェルディ</td><td class="num">5</td><td class="num">0</td><td class="num">2</td><td class="num">3</td><td class="num">2</td><td class="num">8</td><td class="num gd neg">-6</td><td class="num pts">2</td></tr>
+          <tr><td class="num">20</td><td>ジェフユナイテッド千葉</td><td class="num">5</td><td class="num">0</td><td class="num">0</td><td class="num">5</td><td class="num">3</td><td class="num">15</td><td class="num gd neg">-12</td><td class="num pts">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="scatter">
+    <div class="section-head">
+      <h2>攻撃力 × 守備力マップ</h2>
+      <span class="section-note">得点(GF) / 失点(GA)</span>
+    </div>
+    <p class="lede">横軸に得点、縦軸に失点(上ほど少ない=堅守)を取ると、「勝点」だけでは見えないチームの型が浮かぶ。右上ほど理想的、左下ほど苦しい5試合だったことを示す。</p>
+    <div class="scatter-figure">
+      <svg viewBox="0 0 660 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="得点と失点の散布図">
+        <text x="330" y="20" text-anchor="middle" font-family="Oswald" font-size="12" letter-spacing="0.08em" fill="var(--ink-faint)">得点(横) × 失点(縦・上が堅守)</text>
+
+        <!-- quadrant guides -->
+        <line x1="330" y1="40" x2="330" y2="380" stroke="var(--chalk)" stroke-width="1" stroke-dasharray="3 4"/>
+        <line x1="60" y1="210" x2="600" y2="210" stroke="var(--chalk)" stroke-width="1" stroke-dasharray="3 4"/>
+        <text x="595" y="55" text-anchor="end" font-family="Oswald" font-size="10.5" letter-spacing="0.05em" fill="var(--pos)">攻守好調</text>
+        <text x="65" y="55" text-anchor="start" font-family="Oswald" font-size="10.5" letter-spacing="0.05em" fill="var(--ink-faint)">堅守・低得点</text>
+        <text x="595" y="372" text-anchor="end" font-family="Oswald" font-size="10.5" letter-spacing="0.05em" fill="var(--amber)">攻撃頼み・守備課題</text>
+        <text x="65" y="372" text-anchor="start" font-family="Oswald" font-size="10.5" letter-spacing="0.05em" fill="var(--neg)">苦戦</text>
+
+        <!-- axes -->
+        <line x1="60" y1="40" x2="60" y2="380" stroke="var(--ink-faint)" stroke-width="1"/>
+        <line x1="60" y1="380" x2="600" y2="380" stroke="var(--ink-faint)" stroke-width="1"/>
+
+        <!-- x ticks: GF 0,4,8,12,16 -->
+        <g font-family="JetBrains Mono" font-size="10.5" fill="var(--ink-faint)">
+          <text x="60" y="396" text-anchor="middle">0</text>
+          <text x="195" y="396" text-anchor="middle">4</text>
+          <text x="330" y="396" text-anchor="middle">8</text>
+          <text x="465" y="396" text-anchor="middle">12</text>
+          <text x="600" y="396" text-anchor="middle">16</text>
+          <text x="330" y="415" text-anchor="middle" font-size="11">得点 (GF)</text>
+
+          <!-- y ticks: GA 0,4,8,12,16 -->
+          <text x="50" y="44" text-anchor="end">0</text>
+          <text x="50" y="129" text-anchor="end">4</text>
+          <text x="50" y="214" text-anchor="end">8</text>
+          <text x="50" y="299" text-anchor="end">12</text>
+          <text x="50" y="384" text-anchor="end">16</text>
+        </g>
+        <text x="22" y="210" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink-faint)" transform="rotate(-90 22 210)">失点 (GA)</text>
+
+        <!-- data points -->
+        <g>
+          <circle cx="566.25" cy="125" r="5.5" fill="var(--pitch)"/>
+          <text x="566.25" y="115" text-anchor="end" font-family="Oswald" font-size="11.5" font-weight="600" fill="var(--pitch)">町田</text>
+
+          <circle cx="431.25" cy="82.5" r="5.5" fill="var(--pitch)"/>
+          <text x="431.25" y="72.5" text-anchor="middle" font-family="Oswald" font-size="11.5" font-weight="600" fill="var(--pitch)">広島</text>
+
+          <circle cx="397.5" cy="167.5" r="4" fill="var(--ink-faint)"/>
+          <circle cx="498.75" cy="252.5" r="4" fill="var(--ink-faint)"/>
+          <circle cx="262.5" cy="103.75" r="4" fill="var(--ink-faint)"/>
+          <circle cx="224.75" cy="142.25" r="4" fill="var(--ink-faint)"/>
+          <circle cx="232.75" cy="150.25" r="4" fill="var(--ink-faint)"/>
+
+          <circle cx="397.5" cy="188.75" r="5.5" fill="var(--amber)"/>
+          <text x="397.5" y="180" text-anchor="middle" font-family="Oswald" font-size="11.5" font-weight="600" fill="var(--amber)">水戸</text>
+
+          <circle cx="359.75" cy="206" r="4" fill="var(--ink-faint)"/>
+
+          <circle cx="330" cy="210" r="5.5" fill="var(--ink-soft)"/>
+          <text x="330" y="225" text-anchor="middle" font-family="Oswald" font-size="11" fill="var(--ink-soft)">横浜FM</text>
+
+          <circle cx="326" cy="227.25" r="4" fill="var(--ink-faint)"/>
+          <circle cx="334" cy="235.25" r="4" fill="var(--ink-faint)"/>
+
+          <circle cx="367.75" cy="214" r="5.5" fill="var(--ink-soft)"/>
+          <text x="367.75" y="200" text-anchor="middle" font-family="Oswald" font-size="11" fill="var(--ink-soft)">川崎F</text>
+
+          <circle cx="262.5" cy="210" r="4" fill="var(--ink-faint)"/>
+
+          <circle cx="431.25" cy="358.75" r="5.5" fill="var(--neg)"/>
+          <text x="431.25" y="348.75" text-anchor="middle" font-family="Oswald" font-size="11.5" font-weight="600" fill="var(--neg)">浦和</text>
+
+          <circle cx="296.25" cy="231.25" r="4" fill="var(--ink-faint)"/>
+          <circle cx="127.5" cy="125" r="5.5" fill="var(--ink-soft)"/>
+          <text x="127.5" y="115" text-anchor="middle" font-family="Oswald" font-size="11" fill="var(--ink-soft)">清水</text>
+
+          <circle cx="262.5" cy="273.75" r="4" fill="var(--ink-faint)"/>
+          <circle cx="127.5" cy="210" r="4" fill="var(--ink-faint)"/>
+
+          <circle cx="161.25" cy="358.75" r="5.5" fill="var(--neg)"/>
+          <text x="161.25" y="378" text-anchor="middle" font-family="Oswald" font-size="11.5" font-weight="600" fill="var(--neg)">ジェフ千葉</text>
+        </g>
+      </svg>
+      <p class="scatter-caption">※ 得点・失点が同値の一部クラブは視認性のため点をわずかにずらして表示。主なクラブのみラベル表示。</p>
+    </div>
+  </section>
+
+  <section id="gd">
+    <div class="section-head">
+      <h2>得失点差ランキング</h2>
+      <span class="section-note">GD高い順</span>
+    </div>
+    <div class="gd-chart">
+      <div class="gd-row lead"><span class="team">FC町田ゼルビア</span><div class="gd-track"><div class="gd-bar pos" style="width:45.8%"></div></div><span class="val pos">+11</span></div>
+      <div class="gd-row"><span class="team">サンフレッチェ広島</span><div class="gd-track"><div class="gd-bar pos" style="width:37.5%"></div></div><span class="val pos">+9</span></div>
+      <div class="gd-row"><span class="team">柏レイソル</span><div class="gd-track"><div class="gd-bar pos" style="width:16.7%"></div></div><span class="val pos">+4</span></div>
+      <div class="gd-row"><span class="team">鹿島アントラーズ</span><div class="gd-track"><div class="gd-bar pos" style="width:12.5%"></div></div><span class="val pos">+3</span></div>
+      <div class="gd-row"><span class="team">ヴィッセル神戸</span><div class="gd-track"><div class="gd-bar pos" style="width:12.5%"></div></div><span class="val pos">+3</span></div>
+      <div class="gd-row"><span class="team">水戸ホーリーホック</span><div class="gd-track"><div class="gd-bar pos" style="width:12.5%"></div></div><span class="val pos">+3</span></div>
+      <div class="gd-row"><span class="team">FC東京</span><div class="gd-track"><div class="gd-bar pos" style="width:4.2%"></div></div><span class="val pos">+1</span></div>
+      <div class="gd-row"><span class="team">川崎フロンターレ</span><div class="gd-track"><div class="gd-bar pos" style="width:4.2%"></div></div><span class="val pos">+1</span></div>
+      <div class="gd-row"><span class="team">セレッソ大阪</span><div class="gd-track"></div><span class="val">0</span></div>
+      <div class="gd-row"><span class="team">横浜F・マリノス</span><div class="gd-track"></div><span class="val">0</span></div>
+      <div class="gd-row"><span class="team">ファジアーノ岡山</span><div class="gd-track"></div><span class="val">0</span></div>
+      <div class="gd-row"><span class="team">ガンバ大阪</span><div class="gd-track"><div class="gd-bar neg" style="width:4.2%"></div></div><span class="val neg">-1</span></div>
+      <div class="gd-row"><span class="team">アビスパ福岡</span><div class="gd-track"><div class="gd-bar neg" style="width:4.2%"></div></div><span class="val neg">-1</span></div>
+      <div class="gd-row"><span class="team">名古屋グランパス</span><div class="gd-track"><div class="gd-bar neg" style="width:8.3%"></div></div><span class="val neg">-2</span></div>
+      <div class="gd-row"><span class="team">京都サンガF.C.</span><div class="gd-track"><div class="gd-bar neg" style="width:8.3%"></div></div><span class="val neg">-2</span></div>
+      <div class="gd-row"><span class="team">清水エスパルス</span><div class="gd-track"><div class="gd-bar neg" style="width:8.3%"></div></div><span class="val neg">-2</span></div>
+      <div class="gd-row"><span class="team">浦和レッズ</span><div class="gd-track"><div class="gd-bar neg" style="width:16.7%"></div></div><span class="val neg">-4</span></div>
+      <div class="gd-row"><span class="team">V・ファーレン長崎</span><div class="gd-track"><div class="gd-bar neg" style="width:20.8%"></div></div><span class="val neg">-5</span></div>
+      <div class="gd-row"><span class="team">東京ヴェルディ</span><div class="gd-track"><div class="gd-bar neg" style="width:25%"></div></div><span class="val neg">-6</span></div>
+      <div class="gd-row"><span class="team">ジェフユナイテッド千葉</span><div class="gd-track"><div class="gd-bar neg" style="width:50%"></div></div><span class="val neg">-12</span></div>
+    </div>
+  </section>
+
+  <section id="insights">
+    <div class="section-head">
+      <h2>分析ノート</h2>
+      <span class="section-note">5 findings</span>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <h3>開幕ダッシュ、町田が独走</h3>
+        <span class="stat-line">得失点差 +11 / 得点15・失点4</span>
+        <p>4勝1分と無敗を維持しながら最多得点を記録。攻撃と守備の両方で高水準を維持できているクラブは他になく、5試合時点の内容面でも最も安定している。</p>
+      </div>
+      <div class="insight-card">
+        <h3>堅守が支える広島</h3>
+        <span class="stat-line">リーグ最少失点 2</span>
+        <p>得点11に対し失点はわずか2。勝点こそ11で4位だが、失点の少なさは全20クラブ中トップで、崩れにくいチームとして今後上位に絡む可能性が高い。</p>
+      </div>
+      <div class="insight-card">
+        <h3>名門2クラブが中位に沈む</h3>
+        <span class="stat-line">横浜FM 9位・川崎F 11位</span>
+        <p>ともにリーグ制覇経験を持つ両クラブが勝点6〜7の中位発進。失点は大崩れしていないが勝ちきれない試合が続いており、勝点効率の低さが順位に表れている。</p>
+      </div>
+      <div class="insight-card">
+        <h3>攻撃は機能、守備に課題の浦和</h3>
+        <span class="stat-line">得点11(3位タイ) / 失点15(ワースト2位)</span>
+        <p>得点力自体はリーグ上位に匹敵する一方、失点の多さで得失点差-4まで悪化。「攻撃は機能しているのに勝点が伸びない」典型的なパターンが数字から読み取れる。</p>
+      </div>
+      <div class="insight-card">
+        <h3>サプライズ発進の水戸</h3>
+        <span class="stat-line">7位 / 勝点8(2勝2分1敗)</span>
+        <p>得点10・失点7とバランス型の内容で7位につける。上位クラブに比べ知名度は高くないが、内容の安定感から台風の目になり得るポジションにいる。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="methodology">
+    <strong>この分析について。</strong> J.LEAGUE公式サイトおよびSports Moleの公開スタッツ(2026年9月2日時点・第5節終了時)をもとに、得失点差や得点・失点の分布などの指標をAIと共同で整理・可視化したポートフォリオ用サンプルレポートです。同様のアプローチは、SNS運用データやマーケティング指標の分析・可視化業務にもそのまま応用できます。
+  </div>
+
+</div>
+</body>
+</html>

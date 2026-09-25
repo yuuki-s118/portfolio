@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>櫻井祐冴 ポートフォリオ</title>
+<meta name="description" content="櫻井祐冴のポートフォリオ。n8nによる業務自動化、生成AIを使ったアプリ開発、データ分析・可視化の成果物を紹介しています。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+  :root {
+    --paper: #f5f3ec;
+    --paper-raised: #ffffff;
+    --surface-2: #eae7db;
+    --ink: #16232a;
+    --ink-soft: #52625f;
+    --ink-faint: #8b917f;
+    --chalk: #d9d3bf;
+    --accent: #0f6e64;
+    --accent-deep: #0a4a43;
+    --accent-tint: #e3f0ee;
+    --amber: #b8752c;
+    --amber-tint: #f3e6d2;
+    --shadow: 0 1px 2px rgba(16, 35, 30, 0.06), 0 10px 28px rgba(16, 35, 30, 0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #10160f;
+      --paper-raised: #171f1c;
+      --surface-2: #1c2622;
+      --ink: #e9e6d8;
+      --ink-soft: #a7ae9b;
+      --ink-faint: #6d7566;
+      --chalk: #2a3330;
+      --accent: #5fbdb0;
+      --accent-deep: #2f8c7d;
+      --accent-tint: #17302c;
+      --amber: #d99a52;
+      --amber-tint: #2a2013;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 28px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #10160f;
+    --paper-raised: #171f1c;
+    --surface-2: #1c2622;
+    --ink: #e9e6d8;
+    --ink-soft: #a7ae9b;
+    --ink-faint: #6d7566;
+    --chalk: #2a3330;
+    --accent: #5fbdb0;
+    --accent-deep: #2f8c7d;
+    --accent-tint: #17302c;
+    --amber: #d99a52;
+    --amber-tint: #2a2013;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 28px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    line-height: 1.75;
+  }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 56px 24px 80px; }
+
+  header.hero {
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 900;
+    text-wrap: balance;
+    line-height: 1.25;
+  }
+  .hero p.lede {
+    max-width: 60ch;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-top: 14px;
+  }
+  .tagrow { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
+  .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    background: var(--accent-tint);
+    color: var(--accent-deep);
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+  a.link {
+    display: inline-block;
+    margin-top: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    color: var(--accent-deep);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+  a.link:hover { color: var(--accent); }
+
+  section.block { margin-top: 52px; }
+  .block-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 22px;
+  }
+  .block-head h2 { font-size: 20px; margin: 0; font-weight: 700; }
+  .block-head .note {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  .case {
+    background: var(--paper-raised);
+    border: 1px solid var(--chalk);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    padding: 26px 28px;
+    margin-bottom: 22px;
+  }
+  .case + .case { margin-top: 22px; }
+  .case h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .case .kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--accent-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+    margin-top: 14px;
+  }
+  @media (max-width: 640px) { .case-grid { grid-template-columns: 1fr; } }
+  .case dl { margin: 0; }
+  .case dt {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 12px;
+  }
+  .case dt:first-child { margin-top: 0; }
+  .case dd { margin: 3px 0 0; font-size: 14px; color: var(--ink); }
+  .diagram-wrap {
+    background: var(--surface-2);
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .diagram-wrap svg { width: 100%; height: auto; display: block; }
+  .case .tagrow { margin-top: 14px; }
+  .case a.link { margin-top: 14px; }
+
+  .minicard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 640px) { .minicard-grid { grid-template-columns: 1fr; } }
+
+  footer.cta {
+    margin-top: 60px;
+    border-left: 4px solid var(--amber);
+    background: var(--paper-raised);
+    padding: 20px 24px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  footer.cta strong { color: var(--ink); }
+  footer.cta .mono { display: block; margin-top: 8px; color: var(--accent-deep); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Portfolio — 櫻井祐冴</div>
+    <h1>AIとノーコードで、業務の面倒を巻き取る。</h1>
+    <p class="lede">n8nによる業務自動化、生成AIを使ったアプリ開発、公開データの分析・可視化を、要件整理から実装・運用まで一人で担当しています。ここでは実際に自分で手を動かして作った成果物を紹介します。</p>
+    <div class="tagrow">
+      <span class="tag">n8n</span><span class="tag">ChatGPT / Claude API</span><span class="tag">Python</span>
+      <span class="tag">Next.js</span><span class="tag">LangChain / RAG</span><span class="tag">データ可視化</span>
+    </div>
+    <a class="link" href="https://github.com/yuuki-s118" target="_blank" rel="noopener">github.com/yuuki-s118 ↗</a>
+  </header>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>業務自動化ワークフロー</h2>
+      <span class="note">n8n / 本番稼働中</span>
+    </div>
+
+    <div class="case">
+      <span class="kicker">Case 01</span>
+      <h3>見込み客フォロー漏れ防止ワークフロー</h3>
+      <div class="case-grid">
+        <div>
+          <dl>
+            <dt>課題</dt>
+            <dd>見込み客の数が増えるにつれ、誰にいつ最後に連絡したかを手動で追いきれず、フォローの機会を逃すケースが出ていた。</dd>
+            <dt>やったこと</dt>
+            <dd>Google スプレッドシートの顧客管理表と連携し、毎朝自動でシートを確認。最終連絡日から7日以上経過した相手だけを抽出し、Slackへ自動通知する仕組みを要件整理から構築。</dd>
+            <dt>結果</dt>
+            <dd>手動でのチェック作業が不要になり、フォロー漏れを仕組みで防げる状態に。現在も本番運用中。</dd>
+          </dl>
+        </div>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrow1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-faint)"/>
+              </marker>
+            </defs>
+            <rect x="30" y="10" width="240" height="42" rx="5" fill="var(--paper-raised)" stroke="var(--chalk)"/>
+            <text x="150" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink)">Google Sheets</text>
+            <text x="150" y="44" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--ink-faint)">見込み客管理表</text>
+
+            <line x1="150" y1="52" x2="150" y2="80" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+            <rect x="30" y="82" width="240" height="42" rx="5" fill="var(--accent-tint)" stroke="var(--accent)"/>
+            <text x="150" y="102" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--accent-deep)">n8n: Schedule Trigger</text>
+            <text x="150" y="116" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--accent-deep)">毎朝 定時実行</text>
+
+            <line x1="150" y1="124" x2="150" y2="152" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+            <polygon points="150,154 230,192 150,230 70,192" fill="var(--paper-raised)" stroke="var(--chalk)"/>
+            <text x="150" y="188" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--ink)">最終連絡日から</text>
+            <text x="150" y="202" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--ink)">7日以上経過?</text>
+
+            <line x1="150" y1="230" x2="150" y2="258" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+            <text x="160" y="248" font-family="JetBrains Mono" font-size="10" fill="var(--ink-faint)">Yes</text>
+
+            <rect x="30" y="260" width="240" height="42" rx="5" fill="var(--amber-tint)" stroke="var(--amber)"/>
+            <text x="150" y="280" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--amber)">Slack</text>
+            <text x="150" y="294" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--amber)">担当者へ自動通知</text>
+          </svg>
+        </div>
+      </div>
+      <div class="tagrow"><span class="tag">n8n</span><span class="tag">Google Sheets API</span><span class="tag">Slack API</span></div>
+      <a class="link" href="https://github.com/yuuki-s118/n8n-automation-workflows" target="_blank" rel="noopener">ワークフローJSONを見る ↗</a>
+    </div>
+
+    <div class="case">
+      <span class="kicker">Case 02</span>
+      <h3>キーワード監視・自動通知ワークフロー</h3>
+      <div class="case-grid">
+        <div>
+          <dl>
+            <dt>課題</dt>
+            <dd>特定分野の新着情報を毎回手動で検索しており、情報のキャッチアップに時間がかかっていた。</dd>
+            <dt>やったこと</dt>
+            <dd>指定キーワードを含む新着記事を定期的に自動検知し、該当があればチャットへ即座に通知するワークフローを構築。</dd>
+            <dt>工夫</dt>
+            <dd>当初はSlackへ通知していたが、通知を受け取る側のSlack利用率が低かったため、LINE公式アカウントのMessaging APIを使い、LINEグループへ通知する方式に切り替えた。</dd>
+            <dt>結果</dt>
+            <dd>情報収集にかかっていた時間をゼロにし、必要な情報だけが自動で届く状態を実現。</dd>
+          </dl>
+        </div>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-faint)"/>
+              </marker>
+            </defs>
+            <rect x="20" y="14" width="260" height="42" rx="5" fill="var(--paper-raised)" stroke="var(--chalk)"/>
+            <text x="150" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink)">Web / RSS ソース</text>
+            <text x="150" y="48" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--ink-faint)">新着記事を定期取得</text>
+
+            <line x1="150" y1="56" x2="150" y2="84" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+            <rect x="20" y="86" width="260" height="42" rx="5" fill="var(--accent-tint)" stroke="var(--accent)"/>
+            <text x="150" y="106" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--accent-deep)">n8n: キーワード判定</text>
+            <text x="150" y="120" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--accent-deep)">指定ワードを含むか確認</text>
+
+            <line x1="150" y1="128" x2="150" y2="156" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+            <rect x="20" y="158" width="260" height="34" rx="5" fill="var(--amber-tint)" stroke="var(--amber)"/>
+            <text x="150" y="180" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--amber)">LINEへ自動通知</text>
+          </svg>
+        </div>
+      </div>
+      <div class="tagrow"><span class="tag">n8n</span><span class="tag">RSS/Webフック</span><span class="tag">LINE Messaging API</span></div>
+      <a class="link" href="https://github.com/yuuki-s118/n8n-automation-workflows" target="_blank" rel="noopener">ワークフローJSONを見る ↗</a>
+    </div>
+
+    <div class="case">
+      <span class="kicker">Case 03</span>
+      <h3>SNS投稿の自動化(Threads)</h3>
+      <div class="case-grid">
+        <div>
+          <dl>
+            <dt>課題</dt>
+            <dd>複数種目のイベント参加者募集を、毎回手動で投稿しており、画像・動画の添付や文面の使い分けに手間がかかっていた。</dd>
+            <dt>やったこと</dt>
+            <dd>Threads公式APIとn8nで、募集投稿を自動化。種目ごとに複数の文面と画像・動画をGoogleドライブに保管し、投稿のたびに文面と素材をランダムに選んで、文章とメディアを一緒に投稿する仕組みを構築。</dd>
+            <dt>工夫</dt>
+            <dd>同じ種目で前回と同じ文面・素材が続かないローテーション、投稿時刻と間隔の分散、特定の種目だけ一時停止・再開できる設定を実装。メディアの取り込みに失敗した場合は、文章のみで投稿するフォールバックも用意した。OAuth認可によるトークン取得と、有効期限を見据えた運用設計も担当。</dd>
+            <dt>結果</dt>
+            <dd>手動での投稿作業が不要になり、本番稼働中。</dd>
+          </dl>
+        </div>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-faint)"/></marker></defs>
+          <rect x="20" y="10" width="260" height="46" rx="5" fill="var(--paper-raised)" stroke="var(--chalk)"/>
+          <text x="150" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink)">Google ドライブ</text>
+          <text x="150" y="46" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--ink)">種目ごとの画像・動画</text>
+          <line x1="150" y1="56" x2="150" y2="80" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <rect x="20" y="82" width="260" height="46" rx="5" fill="var(--accent-tint)" stroke="var(--accent)"/>
+          <text x="150" y="102" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--accent-deep)">n8n: 抽選・ローテーション</text>
+          <text x="150" y="118" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--accent-deep)">種目・文面・素材を選択</text>
+          <line x1="150" y1="128" x2="150" y2="152" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <rect x="20" y="154" width="260" height="46" rx="5" fill="var(--amber-tint)" stroke="var(--amber)"/>
+          <text x="150" y="174" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--amber)">Threads API</text>
+          <text x="150" y="190" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--amber)">テキスト+メディアを自動投稿</text>
+          </svg>
+        </div>
+      </div>
+      <div class="tagrow"><span class="tag">n8n</span><span class="tag">Threads API</span><span class="tag">OAuth</span><span class="tag">Google Drive API</span><span class="tag">JavaScript</span></div>
+    </div>
+
+    <div class="case">
+      <span class="kicker">Case 04</span>
+      <h3>経済ニュースの自動ダイジェスト</h3>
+      <div class="case-grid">
+        <div>
+          <dl>
+            <dt>課題</dt>
+            <dd>経済・税・年金など対象が広いテーマは、キーワード監視だと通知が膨大になり、かえって読み切れない。</dd>
+            <dt>やったこと</dt>
+            <dd>Google ニュースのRSSと、日本銀行・厚生労働省の公式発表を毎朝取得し、テーマ別の4枠に整理。同じ話題は1本に統合し、上位のみを選んで1通のダイジェストとしてLINEへ通知。日曜には、日本と世界の差を扱う週間版も配信。</dd>
+            <dt>工夫</dt>
+            <dd>見出しの類似度による重複統合、複数のメディアが報じている話題や主要メディアを優先するランク付け、公式発表(一次情報)の混在で、件数を抑えつつ重要度と正確さを両立。API課金のない構成で運用。</dd>
+            <dt>結果</dt>
+            <dd>毎朝の情報収集が、最大12件の1通に集約された。</dd>
+          </dl>
+        </div>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-faint)"/></marker></defs>
+          <rect x="20" y="10" width="260" height="46" rx="5" fill="var(--paper-raised)" stroke="var(--chalk)"/>
+          <text x="150" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink)">Google ニュース / 公式RSS</text>
+          <text x="150" y="46" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--ink)">日銀・厚生労働省 ほか</text>
+          <line x1="150" y1="56" x2="150" y2="80" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow4)"/>
+          <rect x="20" y="82" width="260" height="46" rx="5" fill="var(--accent-tint)" stroke="var(--accent)"/>
+          <text x="150" y="102" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--accent-deep)">n8n: 重複統合・ランク付け</text>
+          <text x="150" y="118" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--accent-deep)">同じ話題を1本に集約</text>
+          <line x1="150" y1="128" x2="150" y2="152" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#arrow4)"/>
+          <rect x="20" y="154" width="260" height="46" rx="5" fill="var(--amber-tint)" stroke="var(--amber)"/>
+          <text x="150" y="174" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--amber)">LINEへ自動通知</text>
+          <text x="150" y="190" text-anchor="middle" font-family="Zen Kaku Gothic New" font-size="10.5" fill="var(--amber)">毎朝1通のダイジェスト</text>
+          </svg>
+        </div>
+      </div>
+      <div class="tagrow"><span class="tag">n8n</span><span class="tag">RSS</span><span class="tag">JavaScript</span><span class="tag">LINE Messaging API</span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>個人開発・分析実績</h2>
+      <span class="note">自主制作</span>
+    </div>
+    <div class="minicard-grid">
+      <div class="case">
+        <span class="kicker">Case 05</span>
+        <h3>AIチャットアプリ</h3>
+        <dl>
+          <dt>技術構成</dt>
+          <dd>Next.js(App Router)+ OpenAI API(GPT-4o)+ Tailwind CSS。フロント・バックエンド一体構成で、ローカルサーバー起動のみで動作。</dd>
+        </dl>
+        <div class="tagrow"><span class="tag">Next.js</span><span class="tag">OpenAI API</span></div>
+        <a class="link" href="https://github.com/yuuki-s118/chatbot-practice" target="_blank" rel="noopener">github.com/yuuki-s118/chatbot-practice ↗</a>
+      </div>
+      <div class="case">
+        <span class="kicker">Case 06</span>
+        <h3>Jリーグ データ分析レポート</h3>
+        <dl>
+          <dt>内容</dt>
+          <dd>J1リーグの公式スタッツを収集し、順位表・得点/失点の散布図・得失点差ランキングを可視化。5つの分析ノートを添えたレポートを作成。</dd>
+        </dl>
+        <div class="tagrow"><span class="tag">データ収集</span><span class="tag">可視化</span></div>
+        <a class="link" href="jleague-report.html" target="_blank" rel="noopener">レポートを見る ↗</a>
+      </div>
+    </div>
+    <div class="case" style="margin-top: 22px;">
+      <span class="kicker">Case 07</span>
+      <h3>競合価格・トレンド監視SaaS</h3>
+      <dl>
+        <dt>概要</dt>
+        <dd>楽天市場(楽天ウェブサービスAPI)の商品価格を定期取得し、グラフで可視化・価格変動をメール通知するWebアプリケーション。認証・商品登録・価格収集・履歴表示・アラート通知まで一気通貫で実装。</dd>
+        <dt>技術的な工夫</dt>
+        <dd>当初はCelery+Redisのワーカーを常時稼働させて毎時価格収集する設計だったが、Renderの無料プランには常時稼働のBackground Workerがないことが判明。有料化を避けるため、本番はGitHub Actionsの毎時スケジュール実行から内部APIを呼び出す方式に切り替えた。Celery+Redis自体はローカル環境用に実装を残し、設計判断の過程もdocs/process-log.mdに記録している。</dd>
+        <dt>結果</dt>
+        <dd>Render上で本番稼働中。要件定義から実装・デプロイまで一人で完結。</dd>
+      </dl>
+      <div class="tagrow"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">Celery / Redis</span><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span></div>
+      <a class="link" href="https://github.com/yuuki-s118/competitor-price-monitor" target="_blank" rel="noopener">github.com/yuuki-s118/competitor-price-monitor ↗</a>
+      <a class="link" href="https://competitor-price-monitor-frontend.onrender.com" target="_blank" rel="noopener" style="margin-left: 14px;">デモを見る ↗</a>
+      <div class="mono" style="font-size:11px;color:var(--ink-faint);margin-top:8px;">※Render無料プランのため、初回アクセス時は起動に30秒〜1分ほどかかる場合があります</div>
+    </div>
+  </section>
+
+  <footer class="cta">
+    <strong>お仕事のご相談について</strong><br>
+    業務自動化・データ分析・AIを使ったツール開発のご相談を承っています。
+    <span class="mono">最終更新: 2026年9月25日</span>
+  </footer>
+
+</div>
+</body>
+</html>
